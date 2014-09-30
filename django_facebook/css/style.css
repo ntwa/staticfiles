@@ -1,0 +1,140 @@
+/* CSS Document */
+/*CSS file for devices with smaller screens*/
+html, body {
+    /*height: 100%;
+    width: 115%;*/
+	font-family: tahoma, helvetica, arial, sans-serif;
+	/*font-size: 130%;*/
+	/*text-align: center;*/
+	/*background: url(../images/page_bg.jpg);*/
+  
+	/*color: #6f6f6f;*/
+	/*background-color:#3399CC;*/
+	background-color:#8b9dc3;
+}
+body {
+    position: relative;
+}
+#img1 {
+    position: absolute;
+    margin: auto; /*make sure it's centered both vertically and horizontally*/
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+th, td {
+
+    text-align: center;
+    border: 0px solid #9A9A9A;
+}
+
+td.mealportion{
+
+    text-align: center;
+    border: 1px solid #9A9A9A;
+
+}
+
+font-size:70%;
+
+
+td.selectgraph{
+
+    text-align: left;
+    border: 0px solid #9A9A9A;
+
+}
+
+td.mealgoalspecification{
+
+	text-align:left;
+	border:  1px solid #9A9A9A; 
+
+}
+
+td.foodchart{
+
+    text-align: center;
+    border:  1px solid #9A9A9A; 
+	/*background-image:url('wellness/images/meals/blank.gif');*/
+	    background-color:white;
+
+}
+
+td.graph{
+
+    text-align: center;
+    border:  0px solid #9A9A9A; 
+	/*background-image:url('http://localhost/wellness/images/meals/blank.gif');*/
+	background-color:white;	
+
+}
+
+td.activitycomments{
+text-align:left;
+border:  0px solid #9A9A9A; 
+}
+
+#activitycommentsbox{
+align: left;
+width: 100%;
+height: 100%;;
+
+}
+
+
+table.graph{
+
+    border: 0px solid #9A9A9A;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+
+}
+
+table.foodchart{
+
+    border: 1px solid #9A9A9A;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+	font-size:80%;
+
+}
+table.mealportion{
+font-size:80%;
+
+
+
+}
+
+
+
+/*
+#interfacetable {
+   border: 1px solid #768AAB;
+   width: 80%;
+   height: 80%;
+   
+}*/
+
+#main_interface_wrapper{
+    border: 1px solid #9A9A9A;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+	align:center;
+	 
+}
+
+li:hover {
+    cursor: hand;
+}
+select:nth-of-type(1){
+  /* 11px is the break */
+  font: 5px Georgia, Serif;
+}
