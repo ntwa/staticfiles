@@ -1388,6 +1388,69 @@ function appendTeamToGarden(box){
      str=str+rank;
      $("#teamscoregarden").html('');
      $("#teamscoregarden").append(str);
+     selected_beneficiary_id=beneficiary_ids[posn];
+
+
+             comment_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example/garden/";
+             comment_url=comment_url+selected_beneficiary_id;
+             comment_url=comment_url+"/";
+
+             var teamlabel="<p><b>Comments and Likes for Botanical Garden by Team: </b><i>";
+             teamlabel=teamlabel+teams[posn];
+             teamlabel=teamlabel+"</i></p>";
+
+             var fblike=teamlabel;
+
+              fblike=fblike+"<iframe id='gardenfblikebt' src='//www.facebook.com/plugins/like.php?href=http://ict4d01.cs.uct.ac.za/wellness/facebook/example";
+//fblike=fblike+selected_beneficiary_id;
+fblike=fblike+"/garden/";
+            fblike=fblike+selected_beneficiary_id;
+            fblike=fblike+"/&width&layout=standard&action=like&show_faces=true&share=true&height=80&appId=138647729661605'";
+
+            fblike=fblike+" scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:80%; height:80px;' allowTransparency='true'></iframe>"
+
+            fblike_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example";
+//fblike=fblike+selected_beneficiary_id;
+fblike_url=fblike_url+"/garden/";
+            fblike_url=fblike_url+selected_beneficiary_id;
+            fblike_url=fblike_url+"/";
+
+           fbcomment="<div class='fb-comments' data-href='";
+           fbcomment=fbcomment+comment_url;
+           fbcomment=fbcomment+"' data-numposts='5' data-colorscheme='light'></div>";
+
+
+             //$(".fb-comment").attr("data-href",comment_url);
+             $("#gardencomment").html('');
+             $('#gardencomment').append(fbcomment);
+
+             $('#gardenfblike').html('');
+             $('#gardenfblike').append(fblike);
+            
+                         fetchLikeCount(fblike_url).always(function(res){
+              fblikes_counter=res;
+        });
+
+          // alert(fblikes_counter);
+
+             // alert($('#like').html());
+           if (typeof FB !== 'undefined') {
+             FB.XFBML.parse(document.getElementById('likebt'));
+             }
+
+
+
+           FB.XFBML.parse($(".fb-comment")[0]);
+
+              setTimeout(function(){
+
+
+
+
+
+              },300);              
+
+
 	
 	}
 
@@ -1400,7 +1463,11 @@ jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue
 
 previous_day_displayed_scoreboard=selectedvalue;
 
-
+date_selected_garden=$("#datepickergarden").val();
+if((date_selected_garden===undefined) || (date_selected_garden===''))
+   date_selected_garden="Today";
+$("#gardenheader").html('');
+$("#gardenheader").append(""+"Scored Gardens. Date:"+date_selected_garden+"");
 
 
 //Retrieve score board
@@ -1445,6 +1512,7 @@ jQuery.ajax({
           teams=[];
           points=[];
           current_garden="Nothing";
+          beneficiary_ids=[]
           for(x in result)
             {
           	 url=""
@@ -1458,6 +1526,7 @@ jQuery.ajax({
              element=element+"'> </div>\n";
             teams.push(result[""+x+""]["D0"]);
             points.push(result[""+x+""]["D4"]);
+             beneficiary_ids.push(result[""+x+""]["D9"]);
           	
           	
           	}
@@ -1844,8 +1913,36 @@ var total=100;
 var total2=60;
 var current_canvas="Nothing";
 var selected_beneficiary_id=""
+var fblikes_counter=0;
+var fblike_url="";
+var comment_url="";
+//fetch the number of likes from a url
+function fetchLikeCount(url){
+    return $.Deferred(function(defer){
+        $.ajax({
+            dataType: 'jsonp',
+            url: 'https://api.facebook.com/method/fql.query?callback=callback',
+            data: {
+                query: 'SELECT like_count FROM link_stat WHERE url="' + url + '"',
+                format: 'JSON'
+            }
+        }).then(function(res){
+            try{
+                var count = res[0].like_count;
+                defer.resolve(count);
+            }catch(e){
+                reject();
+            }
+        }, reject);
+        function reject(){
+            defer.reject(';(');
+        };
+    }).promise();
+}
 
 
+
+//play aquarium
 function playAquarium(box)
 {             
 
@@ -1936,13 +2033,10 @@ function playAquarium(box)
               $("#teamscoreaquirium").append(str);
 
             
-             var comment_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example/#fishtank?q=";
+             comment_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example/fishtank/";
              comment_url=comment_url+selected_beneficiary_id;
-             //var fblike_url="http%3A%2F%2Fict4d01.cs.uct.ac.za%2Fwellness%2Ffacebook%2Fexampleqw%2F&#35fishtank&amp;q=";
-
-             //fblike_url=fblike_url+selected_beneficiary_id;
-             //fblike_url=fblike_url+"&amp;width&amp;layout=standard&amp;action=like&amp;show_faces=true&amp;share=true&amp;height=80&amp;appId=138647729661605";
-
+             comment_url=comment_url+"/";
+             
              var teamlabel="<p><b>Comments and Likes for Aquirium by Team: </b><i>";
              teamlabel=teamlabel+teams[posn];
              teamlabel=teamlabel+"</i></p>";
@@ -1952,136 +2046,54 @@ function playAquarium(box)
 
               fblike=fblike+"<iframe id='likebt' src='//www.facebook.com/plugins/like.php?href=http://ict4d01.cs.uct.ac.za/wellness/facebook/example";
 //fblike=fblike+selected_beneficiary_id;
-fblike=fblike+"/fishtank";
+fblike=fblike+"/fishtank/";
             fblike=fblike+selected_beneficiary_id;
             fblike=fblike+"/&width&layout=standard&action=like&show_faces=true&share=true&height=80&appId=138647729661605'";
 
             fblike=fblike+" scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:80%; height:80px;' allowTransparency='true'></iframe>"
-
-          
-
-           /*
-
-             fblike=fblike+"<iframe id='likebt' src='//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fict4d01.cs.uct.ac.za%2Fwellness%2Ffacebook%2Fexample";
-fblike=fblike+selected_beneficiary_id;
-fblike=fblike+"%2F&#35fishtank&amp;q=";
-            fblike=fblike+selected_beneficiary_id;
-            fblike=fblike+"&amp;width&amp;layout=standard&amp;action=like&amp;show_faces=true&amp;share=true&amp;height=80'";
-          
-            fblike=fblike+" scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:80%; height:80px;' allowTransparency='true'></iframe>"
-*/
-
-             /*var label="<p><b>Comments and Likes for Aquirium by Team: </b><i>";
-             label=label+teams[posn];
-             label=label+"</i></p>";*/
-/*             fbcomment=fbcomment+"<div class='fb-like' data-href='";
-             fbcomment=fbcomment+comment_url;
-             fbcomment=fbcomment+"' data-layout='standard' data-action='like' data-show-faces='true' data-share='true'></div></td></tr>";
-            
-            
-*/
-
- 
-
-
-
-
-             // create the url for facebook likes so that it can be used to count the likes and inform a particular user about new likes.
- 
-  /*          var fblike_url="http%3A%2F%2Fict4d01.cs.uct.ac.za%2Fwellness%2Ffacebook%2Fexample";
-fblike_url=fblike_url+selected_beneficiary_id;
-fblike_url=fblike_url+"%2F&#35fishtank&amp;q=";
+              
+            fblike_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example";
+//fblike=fblike+selected_beneficiary_id;
+fblike_url=fblike_url+"/fishtank/";
             fblike_url=fblike_url+selected_beneficiary_id;
-            fblike_url=fblike_url+"&amp;width&amp;layout=standard&amp;action=like&amp;show_faces=true&amp;share=true&amp;height=80";
-*/
+            fblike_url=fblike_url+"/";
+
+
+ 
+           fbcomment="<div id='commentbox' class='fb-comments' data-href='";
+           fbcomment=fbcomment+comment_url;
+           fbcomment=fbcomment+"' data-numposts='5' data-colorscheme='light'></div>";
+
     
-            /*
-
-            var fblike_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example";
-            fblike_url=fblike_url+selected_beneficiary_id;
-            fblike_url=fblike_url+"/#fishtank&q=";
-            fblike_url=fblike_url+selected_beneficiary_id;
-            fblike_url=fblike_url+"&width&layout=standard&action=like&show_faces=true&share=true&height=80";
-
-            */
-            // alert(fblike);
-
-
-
-            /*
-             var fblike_url="http%3A%2F%2Fict4d01.cs.uct.ac.za%2Fwellness%2Ffacebook%2Fexample";
-             fblike_url=fblike_url+selected_beneficiary_id;
-
-             fblike_url=fblike_url+"%2F&#35fishtank&amp;q=";
-             fblike_url=fblike_url+selected_beneficiary_id;
-             fblike_url=fblike_url+"&amp;width&amp;layout=standard&amp;action=like&amp;show_faces=true&amp;share=true&amp;height=80&amp;appId=138647729661605";
-
-             alert(fblike_url);
-             */
-
-             
-             //important 
            
-             $(".fb-comments").attr("data-href",comment_url);
+             //$(".fb-comment").attr("data-href",comment_url);
+             $("#comment").html('');
+             $('#comment').append(fbcomment);             
 
              $('#like').html('');
              $('#like').append(fblike);
+
+            fetchLikeCount(fblike_url).always(function(res){
+              fblikes_counter=res; 
+        });
+             
+          // alert(fblikes_counter);
+
              // alert($('#like').html());
            if (typeof FB !== 'undefined') {
              FB.XFBML.parse(document.getElementById('likebt'));
              }
            
-             //document.getElementById('ifrm').setAttribute('href', fblike_url);
-             /*
-             fbcomment=fbcomment+"<tr><td><div class='fb-comments' data-href='";
-             fbcomment=fbcomment+comment_url;
-             fbcomment=fbcomment+"' data-numposts='5' data-colorscheme='light' data-mobile=1></div></td></tr>";
-             fbcomment=fbcomment+"</tbody></table>";*/
-             //fbcomment=fbcomment+"<style>.fb-comments, .fb-comments span[style], .fb-comments iframe[style] {width: 100% !important;}</style>";
-            
-            // $("#fbcommentbox").html('');
-             
-             //$("#fbcommentbox").append(fbcomment);
-            
-           //  var fblikecontent=$("#fblikebox").html();
-            // $("#fblikebox").html('');
-            //document.getElementById('fb').setAttribute('href', sUrl); $("#fblikebox").append(fblikecontent); 
-
-           // FB.XFBML.parse();
-            FB.XFBML.parse($('.fb-comment')[0]);
-            //FB.XFBML.parse($(".fblike")[0]);
-            // FB.XFBML.parse($('.fb-like')[0]);
-             //FB.XFBML.parse($('.fb-comment')[0]);
-            // var comment_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example/#fishtank?q=";
-            // comment_url=comment_url+selected_beneficiary_id;
-            // $(".fb-comments").attr("data-href",comment_url);
-
-                   // alert(displayed_box);
-            
+          
+   
+           FB.XFBML.parse($(".fb-comment")[0]);
+                  
               setTimeout(function(){
 
               
-               // parseCommentBox($('.fb-comment')[0]);
-
-            // FB.XFBML.parse($('.fb-comment')[0]);
-
-                     
 
 
-             //var comment_url="javascript:function retrieveAquariumComments(";
-             //comment_url=comment_url+selected_beneficiary_id;
-             //comment_url=comment_url+'8';
-             //comment_url=comment_url+")";
-          //   comment_url="http://ict4d01.cs.uct.ac.za/wellness/facebook/example/#fishtank?q=";
-           //  comment_url=comment_url+selected_beneficiary_id;
-            
-             //alert($(".fb-comments").attr("data-href"));
-
-             //$(".fb-comment").attr("data-href",comment_url);
-
-            //alert($(".fb-comments").attr("data-href"));
-
-            // alert($(".swiper-slide-active .commentslink").attr("href"));
+           
 	      },300);
 
                   time_out_draw_aquarium.push(setInterval(function(){drawAquirium(displayed_box) }, 300));	
@@ -2117,6 +2129,17 @@ jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue
 previous_day_displayed_scoreboard=selectedvalue;
 //alert("Points="+jsonObjects.Points+", Clicks="+jsonObjects.ClicksCounter+", Day="+jsonObjects.Day);
 //return;
+
+
+
+var date_selected_aquarium=$("#datepickerscoretank").val();
+
+if((date_selected_aquarium===undefined) || (date_selected_aquarium===''))
+   date_selected_aquarium="Today"
+
+
+$("#aquariumheader").html('');
+$("#aquariumheader").append(""+"Scored Aquarium. Date:"+date_selected_aquarium+"");
 
 //Retrieve score board
 jQuery.ajax({
@@ -2165,6 +2188,7 @@ jQuery.ajax({
           bonus_points=[];         
           var tracker=0;
           number_of_teams=0;
+         beneficiary_ids=[];
          for(x in result)
             {
               
@@ -2198,6 +2222,39 @@ jQuery.ajax({
 	
 }
 
+
+
+
+
+
+/*
+function notifyUser(event_type,actor_event,actor_email_event,object_event,url_event){
+
+var jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter,EventType:event_type,ActorEvent:actor_event,ActorEmail:actor_email_event,ObjectEvent:object_event,UrlEvent:url_event};
+jQuery.ajax({
+          url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/jsondata/SN/",
+      type: "POST",
+          cache: false,
+      contentType: "application/json",
+      data: JSON.stringify(jsonObjects),
+       error:function(xhr){
+
+          
+      
+    },
+      success: function(result) {
+          clickscounter=0;
+          pointsscored=0;
+
+         }
+            
+    });
+
+
+
+} 
+
+*/
 
 function updateLocalStorage(item,tuple,option)
 {
