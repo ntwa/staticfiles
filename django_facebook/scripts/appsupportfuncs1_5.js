@@ -38,21 +38,21 @@ function showActivityGoal(result,beneficiaryName)
 								  
 								   
 								   //str="There is a goal of <b><i>"+result.Steps+"</i> steps per day</b>.";
-								   str="The daily activity goal for <b>"+beneficiaryName+"</b> is to walk <b><i>"+result.Steps+"</i> steps per day</b>.";
+								   str="The daily activity goal for <b>"+$("#bname").text()+"</b> is to walk <b><i>"+result.Steps+"</i> steps per day</b>.";
 								    switch(result.Steps)
 									 {
 									   case -1:str="None";break;
-									   case -4:str="None";break;
+									   case -4:str="You don't have a steps' goal set for \"<b>"+$("#bname").text()+"</b>\". A beneficiary can have a goal that specifies of how many steps they would like to walk in a day. To start setting a goal click the following link <a href='#activitygoal'>Steps' Goal Setting</a>";break;
 									  // default:str="There is a goal of <b><i>"+result.Steps+"</i> steps per day</b>."; 
 									  
-									  default: str="The daily activity goal for <b>"+beneficiaryName+"</b> is to walk <b><i>"+result.Steps+"</i> steps per day</b>.";
+									  default: str="The daily activity goal for <b>"+$("#bname").text()+"</b> is to walk <b><i>"+result.Steps+"</i> steps per day</b>.";
 								    
 									 } 
 									 
 									   //$('.activity_goal').text(activityGoalJson.Steps);
                               $('.activity_goal').html("");
                               $('.activity_goal').append(str);
-									   $
+									 
 								  								  
 
 								  }
@@ -61,7 +61,7 @@ function showActivityGoal(result,beneficiaryName)
 	
 }
 
-function showMealsGstatesoal(result)
+function showMealsGoal(result)
 { 
   					     
 							     if(result.Fruits!==undefined)
@@ -78,7 +78,8 @@ function showMealsGstatesoal(result)
 									   if((result.Fruits=="None")&&(result.Starch=="None")&&(result.Dairy=="None")&&(result.Fat=="None")&&(result.Protein=="None"));
 									   else
 									    {
-									    	var beneficiaryName=retrieveFromLocalStorage("Name");
+									    	//var beneficiaryName=retrieveFromLocalStorage("Name");
+                                                                                  var beneficiaryName=$('#bname').text();
 									    	var str="The daily meal goal for <b>"+beneficiaryName+"</b> is to consume the following portion sizes from each food group"
 									      //$('#mealgoalstatus').text(str);
 									       $('#mealgoalstatus').html('');  
@@ -623,15 +624,16 @@ else{
 				    var canvas_str="<canvas id='myCanvas' width='240' height='240' style='border:1px solid #d3d3d3;'>Your browser does not support the HTML5 canvas tag.</canvas>";  
 					  $("#canvasshelter").append(canvas_str);
 					  drawPlate();
-					 $('#mealsummary').text("");
-					 $('#mealsummary').append("<font style=\"color:red\"><b>Error:</b></font> No data for meals recorded \" "+previous_day_displayed_meal+"\" ");
+					 $('#mealsummary').html("");
+				 $('#mealsummary').append("<font style=\"color:red\"><b>Attention!!</b></font> No data for meals recorded on  \" "+previous_day_displayed_meal+"<b>\". Ask\""+$("#bname").text()+ "</b>\"  about what she has eaten and record it. This information will help her in knowing whether she is eating healthy or not. ");
 					  
 				}
 				else
 				{
 				  plotFoodChart(created_chart_data);
-				  $('#mealsummary').text(""); 
-			          $('#mealsummary').append("Check <b><i>Diet Info</i></b> to see if this individual is eating a balanced diet and comment on that");
+				  $('#mealsummary').html(""); 
+			         // $('#mealsummary').append("Check <b><i>Diet Info</i></b> to see if this individual is eating a balanced diet and comment on that");
+                                   $('#mealsummary').append("This a summary of how <b>\""+$("#bname").text()+ "</b>\" has been eating. Please share this information with her.");
 				 }
 
 
@@ -713,36 +715,37 @@ else{
                                                 // placeholder.append(placeholdercontent);
 
 						if(plot_graph==-1){
-						     //alert("No data for activity from \" "+previous_day_displayed+"\"");
-							 $('#activitysummary').text("");
-							 $('#activitysummary').append("<font style=\"color:red\"><b>Error:</b></font> No data for steps walked \" "+previous_day_displayed_activity+"\" ");
+						         alert("No Steps uploaded for activity from \" "+previous_day_displayed_activity+"\"");
+							 $('#activitysummary').html("");
+							 $('#activitysummary').append("<font style=\"color:red\"><b>Zero Steps on </b></font> \" "+previous_day_displayed_activity+"\".  Go to the pedometer app on"+$("#bname").text()+"'s phone  and upload steps if you haven't done so");
 							  
 							  }
 						else
 						   {
 						    
-							  if((previous_day_displayed_activity=="This week") || (previous_day_displayed_activity=="Last week")){
+                                                         $('#activitysummary').html("");
+							  if(time_interval==="Weekly"){
 							 //time_average_steps=accumulated_steps/6;
-								$('#activitysummary').text("The average number of steps walked per day in 7 days period is:" +Math.floor(daily_average_steps_week)+"");
+								$('#activitysummary').append("The average number of steps walked per day for a week is:" +Math.floor(daily_average_steps_week)+". Share this information with <b>"+$("#bname").text()+"</b> and motivate her to walk more steps. The average number of steps recommended is 10,000 steps per day. She can reach that goal by increasing her daily steps slowly.");
 							   }
                                              
 							   else
                                                               {
-							       if(previous_day_displayed_activity=="Today")
+							       if(time_interval==="Daily")
                                                                 {
 
 
 
-								  $('#activitysummary').text("The total number of steps walked today is:" +daily_steps+"");
+								  $('#activitysummary').append("The total number of steps walked today is:" +daily_steps+". Share this information with <b>"+$("#bname").text()+"</b> and motivate her to walk more steps. The average number of steps recommended is 10,000 steps per day. She can reach that goal by increasing her daily steps slowly.");
 
 
 
                                                                 }
                                                                 else
                                                                    {
-                                                                      if((previous_day_displayed_activity=="This month") ||(previous_day_displayed_activity=="Last month")){
+                                                                      if(time_interval==="Monthly"){
 
-								          $('#activitysummary').text("The average number of steps walked per day in a month period is:" +Math.floor(weekly_average_steps)+"");
+								          $('#activitysummary').append("The average number of steps walked per day in a month period is:" +Math.floor(weekly_average_steps)+". Share this information with <b>"+$("#bname").text()+"</b> and motivate her to walk more steps. The average number of steps recommended is 10,000 steps per day. She can reach that goal by increasing her daily steps slowly.");
                                                                         }
                                                                        else
                                                                           {
@@ -750,7 +753,7 @@ else{
                                                                   
 
 
-                                                                             $('#activitysummary').text("The average number of steps walked per day in a period of three months is:" +Math.floor(monthly_average_steps)+"");
+                                                                             $('#activitysummary').append("The average number of steps walked per day in a period of three months is:" +Math.floor(monthly_average_steps)+"");
 
                                                                            }
 
@@ -806,8 +809,8 @@ else{
 
 						if(plot_graph==-1){
 						     //alert("No data for activity from \" "+previous_day_displayed+"\"");
-							 $('#weightsummary').text("");
-							 $('#weightsummary').append("<font style=\"color:red\"><b>Error:</b></font> No data for weight recorded \" "+previous_day_displayed_weight+"\" ");
+							 $('#weightsummary').html("");
+							 $('#weightsummary').append("<font style=\"color:red\"><b>Note!!:</b></font> No weight has been recorded for <b>"+$("#bname").text()+"</b> on \" "+previous_day_displayed_weight+"\" ");
 							  
 							  }
 						else
@@ -1464,10 +1467,10 @@ jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue
 previous_day_displayed_scoreboard=selectedvalue;
 
 date_selected_garden=$("#datepickergarden").val();
-if((date_selected_garden===undefined) || (date_selected_garden===''))
+if((date_selected_garden===undefined) || (date_selected_garden==='Click Here!!'))
    date_selected_garden="Today";
 $("#gardenheader").html('');
-$("#gardenheader").append(""+"Scored Gardens. Date:"+date_selected_garden+"");
+$("#gardenheader").append(""+"Fitness Gardens. Date:"+date_selected_garden+"");
 
 
 //Retrieve score board
@@ -2134,12 +2137,12 @@ previous_day_displayed_scoreboard=selectedvalue;
 
 var date_selected_aquarium=$("#datepickerscoretank").val();
 
-if((date_selected_aquarium===undefined) || (date_selected_aquarium===''))
+if((date_selected_aquarium===undefined) || (date_selected_aquarium==='Click Here!!'))
    date_selected_aquarium="Today"
 
 
 $("#aquariumheader").html('');
-$("#aquariumheader").append(""+"Scored Aquarium. Date:"+date_selected_aquarium+"");
+$("#aquariumheader").append(""+"Fitnes  Aquarium. Date:"+date_selected_aquarium+"");
 
 //Retrieve score board
 jQuery.ajax({
@@ -2348,7 +2351,7 @@ function extractActivityDataPoints(result)
 	   {
 		 case -4:plot_graph=-1; break;
 		 case -5: alert(result.R00.F0);return;
-       case -1: alert("There was an error in processing your request");return;
+                 case -1: alert("There was an error in processing your request");return;
 	     
 	   }
 	   
@@ -2590,7 +2593,7 @@ function showScoreBoard(result)
 		   for(var y in result[x])
 		   {
 		   	  
-		         if((y=="D1")||(y=="D2")||(y=="D3")||(y=="D4"))
+		         if((y=="D1")||(y=="D2")||(y=="D3")||(y=="D4")||(y=="D9"))
 		            continue;
 		         
 		    data[score_keys_length][score_fields_keys_length]=new Array();
@@ -2635,19 +2638,67 @@ var previous_day_displayed_meal="None";
 var previous_day_displayed_weight="None";
 var previous_day_displayed_scoreboard="None";
 var sync=0;
-function displayActivityGraph(selectedvalue)
+
+
+
+
+function displayActivityForInterval(interval){
+var current_date=new Date();
+var date=current_date.getDate();
+var month=current_date.getMonth();
+month=month+1;
+
+var year=current_date.getYear();
+year=year+1900;
+var new_date="";
+new_date=new_date+month;
+new_date=new_date+"/";
+new_date=new_date+date;
+new_date=new_date+"/";
+new_date=new_date+year;
+
+$("#currentdate").val(new_date);
+
+switch(interval)
+  { 
+   case "Daily":$("#activity_day_label").html('');$("#activity_day_label").append("Today");navigateActivity('First');break;
+   case "Weekly":$("#activity_day_label").html('');$("#activity_day_label").append("This week");navigateActivity('First');break;
+   case "Monthly":$("#activity_day_label").html('');$("#activity_day_label").append("This month");navigateActivity('First');break;
+
+
+  }
+
+$("#navigation_right").html('');
+
+var nav_label="&nbsp;";
+$("#navigation_right").append(nav_label);
+
+
+
+
+}
+
+
+var time_interval="";
+function displayActivityGraph(startdate,enddate,interval,label)
 {
 	
 //updateLocalStrorage();
 
 
-var  jsonObjects;
+//var  jsonObjects;
 
-jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue};
+//jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue};
+var jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, StartDate:startdate,EndDate:enddate,TimeInterval:interval};
+time_interval=interval;
 
 
 
-previous_day_displayed_activity=selectedvalue;
+
+//if(startdate!==enddate)
+  previous_day_displayed_activity=label
+//else
+ //  previous_day_displayed_activity=startdate+"";
 
 var datapoints;
 
@@ -2672,6 +2723,7 @@ jQuery.ajax({
          if(x==selectedvalue) 
            {
              datapoints=activityJSON[""+x+""];
+             alert(datapoints);
              /*
              for(var y in datapoints)
                 {
@@ -2695,7 +2747,7 @@ jQuery.ajax({
       	 clickscounter=0;
           pointsscored=0;
           extractActivityDataPoints(result);
-          updateLocalStorage("Activity",result,selectedvalue);
+          updateLocalStorage("Activity",result,previous_day_displayed_activity);
          
   
    }
@@ -3006,6 +3058,7 @@ function setActivityGoal()
 
  //var  jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, stepsGoal:$('#steps').val(),targetDuration:duration};
 
+alert("New value of steps"+$('#steps').val());
   var  jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, stepsGoal:$('#steps').val()};
 jQuery.ajax({
       url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/dataupdate/SAG/",
@@ -3022,12 +3075,15 @@ jQuery.ajax({
 		   alert(result.message);
 		if(result.message=="The goal was set successfully")
 		{
+                   var beneficiaryName=$("#bname").text();
 		   //var str="There is a goal of <b><i>"+$('#steps').val()+"</i> steps per day</b>.";
-		   str="The daily activity goal for <b>"+result.Name+"</b> is to walk <b><i>"+$('#steps').val()+"</i> steps per day</b>.";
+		   str="The daily activity goal for <b>"+beneficiaryName+"</b> is to walk <b><i>"+$('#steps').val()+"</i> steps per day</b>.";
 								  
 		   $('.activity_goal').html('');  
 		   $('.activity_goal').append(str); 
 		   activityGoalJson.Steps=$('#steps').val();
+                  
+                  $('#steps').val('');
 		
 		}
 		else
@@ -3135,7 +3191,8 @@ jQuery.ajax({
          //mealsGoalJson.Duration=jsonObjects.Duration;  
          //$('#mealgoalstatus').text("Existing goal shown below");
          
-          	var str="The daily meal goal for <b>"+beneficiaryName+"</b> is to consume the following portion sizes from each food group"
+                var beneficiaryName=$("#bname").text();   
+        	var str="The daily meal goal for <b>"+beneficiaryName+"</b> is to consume the following portion sizes from each food group"
 									      
 			   $('#mealgoalstatus').html('');  
 		      $('#mealgoalstatus').append(str)   
@@ -3216,10 +3273,14 @@ function retrieveWeight(){
 
 }
 
+//var beneficiaryName={{fname}};
+
 function retrieveActivityGoal(){
                       var jsonObjects={Empty:''};
                       var goal;
   
+        var beneficiaryName=$("#bname").text();
+
   			         	jQuery.ajax({
       						url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/jsondata/RAG/",
      						type: "POST",
@@ -3228,7 +3289,7 @@ function retrieveActivityGoal(){
       						error:function(xhr){
       //alert("An error occured: " + xhr.status + " " + xhr.statusText);
         var activityGoalJSONstr=retrieveFromLocalStorage("ActivityGoal");
-        var beneficiaryName=retrieveFromLocalStorage("Name");
+       // var beneficiaryName=$("#bname").text();
         var activityGoalJSON=JSON.parse(activityGoalJSONstr);
         //for(var x in activityGoalJSON)
         {
@@ -3264,7 +3325,7 @@ function retrieveActivityGoal(){
      						//Write your code here
 							           clickscounter=0;
 							           pointscounter=0;
-							           var beneficiaryName=retrieveFromLocalStorage("Name");
+							          // var beneficiaryName=retrieveFromLocalStorage("Name");
 							           showActivityGoal(result,beneficiaryName); 
 							           updateLocalStorage("ActivityGoal",result,"Goal");
                                 
