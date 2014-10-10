@@ -18,6 +18,135 @@ var mealsGoal={Starch:"None",FruitsAndVeges:"None",Dairy:"None",Fat:"None",Prote
 var mealsGoalJson=mealsGoal;
 
 
+var block_horizontal_position=10;
+function activityLoadingFeedback()
+{
+
+block_horizontal_position=10;
+var c = document.getElementById("activityloading");
+var ctx = c.getContext("2d");
+ctx.font = "12px Arial";
+ctx.fillText("Wait!! -- Chart Loading!!",10,50);
+var counter=0;
+var display_interval=setInterval(function(){
+try
+{
+var c= document.getElementById("activityloading");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "blue";
+ctx.fillRect(block_horizontal_position,60,5,5);
+block_horizontal_position=block_horizontal_position+5;
+
+ctx.fillStyle = "white";
+ctx.fillRect(block_horizontal_position,60,10,10);
+block_horizontal_position=block_horizontal_position+5;
+
+
+if(counter==11){
+    clearInterval(display_interval);
+   
+   }
+counter=counter+1;
+
+
+
+
+ }
+ catch(err){
+ clearInterval(display_interval);
+}    
+},1000);
+
+
+}
+
+var display__food_interval=0;
+function foodLoadingFeedback()
+{
+
+block_horizontal_position=50;
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.font = "12px Arial";
+ctx.fillText("Wait!! -- Chart Loading!!",50,120);
+var counter=0;
+display__food_interval=setInterval(function(){
+try
+{
+var c= document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "blue";
+ctx.fillRect(block_horizontal_position,130,5,5);
+block_horizontal_position=block_horizontal_position+5;
+
+ctx.fillStyle = "white";
+ctx.fillRect(block_horizontal_position,130,5,5);
+block_horizontal_position=block_horizontal_position+5;
+
+
+if(counter==11){
+    clearInterval(display_interval);
+
+   }
+counter=counter+1;
+
+
+
+
+ }
+ catch(err){
+ clearInterval(display_interval);
+}
+},1000);
+
+
+}
+
+
+function gardenLoadingFeedback()
+{
+
+block_horizontal_position=10;
+var c = document.getElementById("gardenloading");
+var ctx = c.getContext("2d");
+ctx.font = "12px Arial";
+ctx.fillText("Wait!! -- Garden Loading!!",10,50);
+var counter=0;
+var display_interval=setInterval(function(){
+try
+{
+var c= document.getElementById("gardenloading");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "blue";
+ctx.fillRect(block_horizontal_position,60,5,5);
+block_horizontal_position=block_horizontal_position+5;
+
+ctx.fillStyle = "white";
+ctx.fillRect(block_horizontal_position,60,10,10);
+block_horizontal_position=block_horizontal_position+5;
+
+
+if(counter==11){
+    clearInterval(display_interval);
+
+   }
+counter=counter+1;
+
+
+
+
+ }
+ catch(err){
+ clearInterval(display_interval);
+}
+},1000);
+
+
+}
+
+
+
+
 function retrieveGoals()
 {
 retrieveMealsGoal();
@@ -1459,6 +1588,28 @@ fblike_url=fblike_url+"/garden/";
 
 function displayScoreGardens(selectedvalue)
 {
+
+          var str_wrapper="<div class='swiper-wrapper'>\n";
+          var str="<div class='swiper-slide'>";
+          str=str+"<canvas id='gardenloading'  width='200' height='100' style='border:1px solid #d3d3d3;'>Wait Page Looading...</canvas>";
+          var element="";
+          element=element+str;
+          element=element+"</div>\n";
+
+
+          str=element;
+
+          str_wrapper=str_wrapper+str;
+          str_wrapper=str_wrapper+"\n</div>";
+          $(".swiper-container[id='container1']").html('');
+          $(".swiper-container[id='container1']").append(str_wrapper);
+          $(".swiper-wrapper").html('');
+           $(".swiper-wrapper").html(str);
+              swipe(1);
+gardenLoadingFeedback();
+return;
+
+
 	
 var  jsonObjects;
 
@@ -1480,7 +1631,7 @@ jQuery.ajax({
 	  cache: false,
       contentType: "application/json",
       data: JSON.stringify(jsonObjects),
-       error:function(xhr){
+       eror:function(xhr){
      /*
         var scoreboardJSONstr=retrieveFromLocalStorage("ScoreGardens");
         var scoreboardJSON=JSON.parse(scoreboardJSONstr);
@@ -1505,12 +1656,12 @@ jQuery.ajax({
       	 var ip_address="http://ict4d01.cs.uct.ac.za"
       	 clickscounter=0;
           pointsscored=0;
-          var str_wrapper="<div class='swiper-wrapper'>\n";
-          var str="<div class='swiper-slide'>";
+          str_wrapper="<div class='swiper-wrapper'>\n";
+          str="<div class='swiper-slide'>";
           str=str+"<img src='";
           //str=str+static_url_val;
           //str=str+"http://ict4d.cs.uct.ac.za/static/";
-          var element=""
+          element=""
           var posn=1;
           teams=[];
           points=[];
@@ -2682,11 +2833,11 @@ $("#navigation_right").append(nav_label);
 var time_interval="";
 function displayActivityGraph(startdate,enddate,interval,label)
 {
-	
-//updateLocalStrorage();
+var canvas_str="<canvas id='activityloading'  width='200' height='100' style='border:1px solid #d3d3d3;'>Wait Page Looading...</canvas>";	
+$("#activityplaceholder").html('');
+$("#activityplaceholder").append(canvas_str);
 
-
-//var  jsonObjects;
+activityLoadingFeedback();
 
 //jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue};
 var jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, StartDate:startdate,EndDate:enddate,TimeInterval:interval};
@@ -2899,6 +3050,15 @@ jQuery.ajax({
 function displayMealGraph(selectedvalue)
 {
 
+ $("#canvasshelter").html('');
+ var canvas_str="<canvas id='myCanvas' width='240' height='240' style='border:1px solid #d3d3d3;'>Your browser does not support the HTML5 canvas tag.</canvas>"; 
+ $("#canvasshelter").append(canvas_str);
+ drawPlate();
+
+foodLoadingFeedback();
+
+
+
 var  jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue};
 previous_day_displayed_meal=selectedvalue
 jQuery.ajax({
@@ -2907,6 +3067,8 @@ jQuery.ajax({
       contentType: "application/json",
       data: JSON.stringify(jsonObjects),
       error:function(xhr){
+           clearInterval(display__food_interval);
+
       //alert("An error occured: " + xhr.status + " " + xhr.statusText);
         var mealsJSONstr=retrieveFromLocalStorage("Meals");
         var mealsJSON=JSON.parse(mealsJSONstr);
@@ -2939,6 +3101,7 @@ jQuery.ajax({
       
     },
       success: function(result) {
+      clearInterval(display__food_interval);
      //Write your code here
         clickscounter=0;
           pointsscored=0;
