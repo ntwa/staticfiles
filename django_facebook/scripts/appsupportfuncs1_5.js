@@ -19,6 +19,7 @@ var mealsGoalJson=mealsGoal;
 
 
 var block_horizontal_position=10;
+var display_interval=0;
 function activityLoadingFeedback()
 {
 
@@ -28,7 +29,8 @@ var ctx = c.getContext("2d");
 ctx.font = "12px Arial";
 ctx.fillText("Wait!! -- Chart Loading!!",10,50);
 var counter=0;
-var display_interval=setInterval(function(){
+clearInterval(display_interval);
+display_interval=setInterval(function(){
 try
 {
 var c= document.getElementById("activityloading");
@@ -49,8 +51,6 @@ if(counter==11){
 counter=counter+1;
 
 
-
-
  }
  catch(err){
  clearInterval(display_interval);
@@ -60,7 +60,7 @@ counter=counter+1;
 
 }
 
-var display__food_interval=0;
+//var display__food_interval=0;
 function foodLoadingFeedback()
 {
 
@@ -70,7 +70,8 @@ var ctx = c.getContext("2d");
 ctx.font = "12px Arial";
 ctx.fillText("Wait!! -- Chart Loading!!",50,120);
 var counter=0;
-display__food_interval=setInterval(function(){
+ clearInterval(display_interval);
+display_interval=setInterval(function(){
 try
 {
 var c= document.getElementById("myCanvas");
@@ -107,15 +108,140 @@ function gardenLoadingFeedback()
 {
 
 block_horizontal_position=10;
-var c = document.getElementById("gardenloading");
+var gardenbox=".swiper-slide-active > .gardenloading";
+var c=$(gardenbox)[0];
 var ctx = c.getContext("2d");
 ctx.font = "12px Arial";
 ctx.fillText("Wait!! -- Garden Loading!!",10,50);
 var counter=0;
-var display_interval=setInterval(function(){
+clearInterval(display_interval);
+display_interval=setInterval(function(){
 try
 {
-var c= document.getElementById("gardenloading");
+//var c= document.getElementById("gardenloading");
+//var ctx = c.getContext("2d");
+ctx.fillStyle = "blue";
+ctx.fillRect(block_horizontal_position,60,5,5);
+block_horizontal_position=block_horizontal_position+5;
+
+ctx.fillStyle = "white";
+ctx.fillRect(block_horizontal_position,60,10,10);
+block_horizontal_position=block_horizontal_position+5;
+
+if(counter==15){
+   //alert("Clearing --");
+    clearInterval(display_interval);
+
+   }
+counter=counter+1;
+
+ }
+ catch(err){
+ clearInterval(display_interval);
+}
+},1000);
+
+
+}
+
+
+function aquariumLoadingFeedback()
+{
+
+block_horizontal_position=10;
+var gardenbox=".swiper-slide-active > .aquarium_canvas";
+var c=$(gardenbox)[0];
+var ctx = c.getContext("2d");
+ctx.font = "12px Arial";
+ctx.fillText("Wait!! -- Fish Tank Loading!!",10,50);
+var counter=0;
+clearInterval(display_interval);
+display_interval=setInterval(function(){
+try
+{
+//var c= document.getElementById("gardenloading");
+//var ctx = c.getContext("2d");
+ctx.fillStyle = "blue";
+ctx.fillRect(block_horizontal_position,60,5,5);
+block_horizontal_position=block_horizontal_position+5;
+
+ctx.fillStyle = "white";
+ctx.fillRect(block_horizontal_position,60,10,10);
+block_horizontal_position=block_horizontal_position+5;
+
+if(counter==15){
+   //alert("Clearing --");
+    clearInterval(display_interval);
+
+   }
+counter=counter+1;
+
+ }
+ catch(err){
+ clearInterval(display_interval);
+}
+},1000);
+
+
+}
+
+
+function scoreboardLoadingFeedback()
+{
+
+block_horizontal_position=10;
+var c = document.getElementById("scoreboardloading");
+var ctx = c.getContext("2d");
+ctx.font = "12px Arial";
+ctx.fillText("Wait!! -- Score Board Loading!!",10,50);
+var counter=0;
+clearInterval(display_interval);
+display_interval=setInterval(function(){
+try
+{
+var c= document.getElementById("scoreboardloading");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "blue";
+ctx.fillRect(block_horizontal_position,60,5,5);
+block_horizontal_position=block_horizontal_position+5;
+
+ctx.fillStyle = "white";
+ctx.fillRect(block_horizontal_position,60,10,10);
+block_horizontal_position=block_horizontal_position+5;
+
+
+if(counter==11){
+    clearInterval(display_interval);
+
+   }
+counter=counter+1;
+
+
+
+
+ }
+ catch(err){
+ clearInterval(display_interval);
+}
+},1000);
+
+
+}
+
+function scorebadgesLoadingFeedback()
+{
+
+block_horizontal_position=10;
+var c = document.getElementById("scorebadgesloading");
+var ctx = c.getContext("2d");
+ctx.font = "12px Arial";
+ctx.fillText("Wait!! -- Badges Loading!!",10,50);
+var counter=0;
+clearInterval(display_interval);
+display_interval=setInterval(function(){
+try
+{
+var c= document.getElementById("scorebadgesloading");
 var ctx = c.getContext("2d");
 ctx.fillStyle = "blue";
 ctx.fillRect(block_horizontal_position,60,5,5);
@@ -1363,6 +1489,22 @@ jQuery.ajax({
 
 function displayScoreBoard(selectedvalue)
 {
+var table_str="";
+table_str=table_str+"<tr><td>";
+var canvas_str="<canvas id='scoreboardloading'  width='200' height='100' style='border:1px solid #d3d3d3;'>Wait Page Looading...</canvas>";
+table_str=table_str+canvas_str;
+table_str=table_str+"</td></tr>";
+//$("#scoreboard").html('');
+ $("#scoreboard tbody").html('');
+ $("#scoreboard thead").html('');
+
+
+$("#scoreboard tbody").append(table_str);
+
+scoreboardLoadingFeedback();
+
+
+
 	
 var  jsonObjects;
 jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue};
@@ -1372,13 +1514,15 @@ previous_day_displayed_scoreboard=selectedvalue;
 
 //Retrieve score board
 jQuery.ajax({
-	  url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/jsondata/RSB/",
+      url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/jsondata/RSB/",
       type: "POST",
-	  cache: false,
+      cache: false,
       contentType: "application/json",
       data: JSON.stringify(jsonObjects),
-       error:function(xhr){
+      error:function(xhr){
      
+         clearInterval(display_interval);
+
         var scoreboardJSONstr=retrieveFromLocalStorage("ScoreBoard");
         var scoreboardJSON=JSON.parse(scoreboardJSONstr);
         for(var x in scoreboardJSON)
@@ -1400,6 +1544,7 @@ jQuery.ajax({
     },
       success: function(result) {
       	
+         clearInterval(display_interval);
       	 clickscounter=0;
           pointsscored=0;
           showScoreBoard(result);
@@ -1559,15 +1704,15 @@ fblike_url=fblike_url+"/garden/";
              $('#gardenfblike').html('');
              $('#gardenfblike').append(fblike);
             
-                         fetchLikeCount(fblike_url).always(function(res){
+                      /*   fetchLikeCount(fblike_url).always(function(res){
               fblikes_counter=res;
-        });
+        });*/
 
           // alert(fblikes_counter);
 
              // alert($('#like').html());
            if (typeof FB !== 'undefined') {
-             FB.XFBML.parse(document.getElementById('likebt'));
+             FB.XFBML.parse(document.getElementById('gardenfblikebt'));
              }
 
 
@@ -1589,9 +1734,13 @@ fblike_url=fblike_url+"/garden/";
 function displayScoreGardens(selectedvalue)
 {
 
+         // $('.swiper-container').removeClass('gardenbg2').addClass('gardenbg1');
+          //$('.swiper-container').removeClass('aquariumbg2').addClass('gardenbg1');
+          //$('.swiper-container').removeClass('aquariumbg1').addClass('gardenbg1');
+
           var str_wrapper="<div class='swiper-wrapper'>\n";
           var str="<div class='swiper-slide'>";
-          str=str+"<canvas id='gardenloading'  width='200' height='100' style='border:1px solid #d3d3d3;'>Wait Page Looading...</canvas>";
+          str=str+"<canvas class='gardenloading'  width='200' height='200' style='border:1px solid #d3d3d3;'>Wait Page Looading...</canvas>";
           var element="";
           element=element+str;
           element=element+"</div>\n";
@@ -1606,8 +1755,11 @@ function displayScoreGardens(selectedvalue)
           $(".swiper-wrapper").html('');
            $(".swiper-wrapper").html(str);
               swipe(1);
+//$('.swiper-container').removeClass('gardenbg1').addClass('gardenbg2');
+          $('.swiper-container').removeClass('gardenbg2').addClass('gardenbg1');
+          $('.swiper-container').removeClass('aquariumbg2').addClass('gardenbg1');
+          $('.swiper-container').removeClass('aquariumbg1').addClass('gardenbg1');
 gardenLoadingFeedback();
-return;
 
 
 	
@@ -1631,7 +1783,7 @@ jQuery.ajax({
 	  cache: false,
       contentType: "application/json",
       data: JSON.stringify(jsonObjects),
-       eror:function(xhr){
+       error:function(xhr){
      /*
         var scoreboardJSONstr=retrieveFromLocalStorage("ScoreGardens");
         var scoreboardJSON=JSON.parse(scoreboardJSONstr);
@@ -1653,6 +1805,10 @@ jQuery.ajax({
       
     },
       success: function(result) {
+
+         clearInterval(display_interval);
+
+        $('.swiper-container').removeClass('gardenbg2').addClass('gardenbg1');
       	 var ip_address="http://ict4d01.cs.uct.ac.za"
       	 clickscounter=0;
           pointsscored=0;
@@ -1774,7 +1930,7 @@ for(var z=0;z<start_posns.length;z++){
           	  			  //check if the fish belong to the big fish category
           	  			    for(x=0;x<big_fish.length;x++){
           	  	
-          	  i	
+          	  
                             if(big_fish[x]==start_posns[z][3])
                             {
                  	          break;  
@@ -2071,6 +2227,7 @@ var fblikes_counter=0;
 var fblike_url="";
 var comment_url="";
 //fetch the number of likes from a url
+/*
 function fetchLikeCount(url){
     return $.Deferred(function(defer){
         $.ajax({
@@ -2093,7 +2250,131 @@ function fetchLikeCount(url){
         };
     }).promise();
 }
+*/
 
+
+function checkFBSocialPluginEvent(event_url,event_object,object_owner)
+{
+var jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter,EventUrl:event_url,EventObject:event_object,ObjectOwner:object_owner};
+jQuery.ajax({
+          url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/jsondata/SN/",
+      type: "POST",
+          cache: false,
+      contentType: "application/json",
+      data: JSON.stringify(jsonObjects),
+       error:function(xhr){
+
+          
+      
+    },
+      success: function(result) {
+          clickscounter=0;
+          pointsscored=0;
+
+         }
+            
+    });
+
+
+
+
+}
+
+
+
+
+function FBSocialPluginEventsDetector(){
+
+$("#like").on("vclick", function(event){
+    event.stopPropagation();
+    checkFBSocialPluginEvent(fblike_url);
+});
+/*
+var iframeClick = function () {
+    var isOverIframe = false;
+
+   
+    windowLostBlur = function () {
+        if (isOverIframe === true) {
+            // DO STUFF
+            isOverIframe = false;
+        }//
+    };
+   
+    jQuery(window).focus();
+    jQuery('#likebt').mouseenter(function(){
+        isOverIframe = true;
+       // console.log(isOverIframe);
+       alert("An event happened");
+    });
+    
+    jQuery('#likebt').mouseleave(function(){
+        isOverIframe = false;
+        console.log(isOverIframe);
+     //check if the number of likes has changed
+    //var current_fblikes_counter=0;
+     
+      setTimeout(function(){
+       
+      var current_fblikes_counter=0;
+      if(lock);
+          //return;
+      else
+         lock=1;   
+       fetchLikeCount(fblike_url).always(function(res){
+             //fblikes_counter=res;
+          
+             current_fblikes_counter=res;
+       // alert("XFb="+fblikes_counter+" and CFb="+current_fblikes_counter);
+        if(fblikes_counter>current_fblikes_counter)
+         {
+         // alert("Unlike happened");
+            fblikes_counter=current_fblikes_counter;
+
+         }
+         else
+           {
+             if(fblikes_counter< current_fblikes_counter)
+              {
+              //notify the team whose pages has been liked
+              // alert("Like happened");   
+               fblikes_counter=current_fblikes_counter;
+              }
+              else
+              {
+
+              // alert("Nothing happened");
+
+               }
+               //notifyUser("Like",{{user}},{{email}},"fishtank",fblike_url);                 
+         
+             }
+             
+           });
+    
+     /* 
+         setTimeout(function(){
+        // fblikes_counter=current_fblikes_counter;
+         lock=0;
+         alert(fblikes_counter);
+          },3000);*/
+        /*
+         
+       },10000); 
+     
+    jQuery(window).blur(function () {
+        windowLostBlur();
+      });
+
+   });
+
+};
+
+iframeClick();
+*/
+
+
+}
 
 
 //play aquarium
@@ -2101,7 +2382,7 @@ function playAquarium(box)
 {             
 
  
-               
+              
               
 	           if(current_canvas=="Nothing");
 	           else
@@ -2227,10 +2508,10 @@ fblike_url=fblike_url+"/fishtank/";
              $('#like').html('');
              $('#like').append(fblike);
 
-            fetchLikeCount(fblike_url).always(function(res){
+           /* fetchLikeCount(fblike_url).always(function(res){
               fblikes_counter=res; 
         });
-             
+             */
           // alert(fblikes_counter);
 
              // alert($('#like').html());
@@ -2252,7 +2533,7 @@ fblike_url=fblike_url+"/fishtank/";
 
                   time_out_draw_aquarium.push(setInterval(function(){drawAquirium(displayed_box) }, 300));	
 	            
-	
+              //fishTankLikeDetector();	
 	
 	
 }
@@ -2274,7 +2555,37 @@ var number_of_teams=0;
 
 function displayScoreTanks(selectedvalue)
 {
-	
+
+
+
+
+          var str_wrapper="<div class='swiper-wrapper'>\n";
+          var str="<div class='swiper-slide'>";
+          str=str+"<canvas class='aquarium_canvas'  width='200' height='200' style='border:1px solid #d3d3d3;'>Wait Page Looading...</canvas>";
+          var element="";
+          element=element+str;
+          element=element+"</div>\n";
+
+
+          str=element;
+
+          str_wrapper=str_wrapper+str;
+          str_wrapper=str_wrapper+"\n</div>";
+          $(".swiper-container[id='container2']").html('');
+          $(".swiper-container[id='container2']").append(str_wrapper);
+         // $(".swiper-wrapper").html('');
+          // $(".swiper-wrapper").append(str);
+              swipe(2);
+//$('.swiper-container').removeClass('aquariumbg1').addClass('aquariumbg2');
+          $('.swiper-container').removeClass('gardenbg2').addClass('gardenbg1');
+          $('.swiper-container').removeClass('gardenbg1').addClass('gardenbg1');
+          $('.swiper-container').removeClass('aquariumbg1').addClass('aquariumbg2');
+
+
+
+
+aquariumLoadingFeedback();
+
 var  jsonObjects;
 
 
@@ -2299,7 +2610,7 @@ $("#aquariumheader").append(""+"Fitnes  Aquarium. Date:"+date_selected_aquarium+
 jQuery.ajax({
 	  url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/jsondata/RST/",
       type: "POST",
-	  cache: false,
+      cache: false,
       contentType: "application/json",
       data: JSON.stringify(jsonObjects),
        error:function(xhr){
@@ -2308,6 +2619,13 @@ jQuery.ajax({
       
     },
       success: function(result) {
+         
+
+          clearInterval(display_interval);
+
+         $('.swiper-container').removeClass('aquariumbg2').addClass('aquariumbg1');
+
+
       	 var ip_address="http://ict4d.cs.uct.ac.za"
       	 clickscounter=0;
           pointsscored=0;
@@ -2367,7 +2685,7 @@ jQuery.ajax({
           playAquarium("box0");  
           current_canvas="box0"; 
           swipe(2); 
-          
+         
          }
             
     });
@@ -2714,6 +3032,137 @@ function extractWeightDataPoints(result){
 	}
 	
 	
+
+function displayScoreBadges(selectedvalue)
+{
+var table_str="";
+table_str=table_str+"<tr><td>";
+var canvas_str="<canvas id='scorebadgesloading'  width='200' height='100' style='border:1px solid #d3d3d3;'>Wait Page Looading...</canvas>";
+table_str=table_str+canvas_str;
+table_str=table_str+"</td></tr>";
+
+ $("#scorebadges tbody").html('');
+ $("#scorebadges thead").html('');
+
+
+$("#scorebadges tbody").append(table_str);
+
+scorebadgesLoadingFeedback();
+
+        
+var  jsonObjects;
+jsonObjects= {Points:pointsscored,ClicksCounter:clickscounter, Day:selectedvalue};
+
+previous_day_displayed_scoreboard=selectedvalue;
+
+
+//Retrieve score board
+jQuery.ajax({
+      url: "http://ict4d01.cs.uct.ac.za/wellness/facebook/jsondata/RSB/",
+      type: "POST",
+      cache: false,
+      contentType: "application/json",
+      data: JSON.stringify(jsonObjects),
+      error:function(xhr){
+       /* 
+        var scoreboardJSONstr=retrieveFromLocalStorage("ScoreBadges");
+        var scoreboardJSON=JSON.parse(scoreboardJSONstr);
+        for(var x in scoreboardJSON)
+        {
+                
+         
+        
+                  
+         if(x==selectedvalue) 
+           {
+             scoredata=scoreboardJSON[""+x+""];
+  
+             showScoreBoard(scoredata);       
+                        
+                }               
+                }
+        
+      */
+    },
+      success: function(result) {
+           clearInterval(display_interval);
+      
+          clickscounter=0;
+          pointsscored=0;
+          showScoreBadges(result);
+         // updateLocalStorage("ScoreBadges",result,selectedvalue);
+          
+            }
+    });
+
+
+
+
+}
+
+function showScoreBadges(result)
+{
+
+         var score_keys_length=0;
+          var score_fields_keys_length=0;
+               var data=new Array();
+       var counter=1;   
+       
+       var str="";
+       var str2="<tr><td>&nbsp;</td><td>Team</td><td>Level</td><td>Badge</td></tr>";
+       //$("#scoreboard").text("");
+       
+       $("#scorebadges tbody").html('');
+       $("#scorebadges thead").html('');
+       $("#scorebadges thead").append(str2);
+
+               //$("#scoreboard").append(str);
+       for(var x in result)
+            {  
+            
+                   data[score_keys_length]=new Array();
+                   str=str+"<tr class='child'>";
+                   str=str+"<td>"+counter+"</td>";
+                   counter++;
+                   score_fields_keys_length=0;
+      
+                   for(var y in result[x])
+                   {
+                          
+                    if((y=="D1")||(y=="D2")||(y=="D3")||(y=="D4")||(y=="D5")||(y=="D6")||(y=="D9"))
+                       continue;
+                         
+                     data[score_keys_length][score_fields_keys_length]=new Array();
+                     data[score_keys_length][score_fields_keys_length]=result[""+x+""][""+y+""];
+                   
+                     str=str+"<td>";
+                     if(y=="D8"){
+
+                       str=str+"<img src='";
+                       str=str+data[score_keys_length][score_fields_keys_length];
+                       str=str+"'/>"
+
+i
+
+                    }
+                   else
+                       str=str+data[score_keys_length][score_fields_keys_length];
+             
+                    str=str+"</td>";
+                              score_fields_keys_length++;
+                   }
+                     
+                    score_keys_length++;
+                  str=str+"</tr>";
+                 
+                }
+          $("#scorebadges tbody").append(str);
+
+
+
+}
+
+
 function showScoreBoard(result)
 {
 	 var score_keys_length=0;
@@ -2722,7 +3171,7 @@ function showScoreBoard(result)
        var counter=1;   
        
        var str="";
-       var str2="<tr><td>&nbsp;</td><td>Team</td><td>Usage Points</td><td>Bonus Points</td><td>Rank</td><td>Badge</td></tr>";
+       var str2="<tr><td>&nbsp;</td><td>Team</td><td>Usage Points</td><td>Bonus Points</td><td>Rank</td></tr>";
        //$("#scoreboard").text("");
        
        $("#scoreboard tbody").html('');
@@ -2744,13 +3193,13 @@ function showScoreBoard(result)
 		   for(var y in result[x])
 		   {
 		   	  
-		         if((y=="D1")||(y=="D2")||(y=="D3")||(y=="D4")||(y=="D9"))
+		         if((y=="D1")||(y=="D2")||(y=="D3")||(y=="D4")||(y=="D8")||(y=="D9"))
 		            continue;
 		         
 		    data[score_keys_length][score_fields_keys_length]=new Array();
 	            data[score_keys_length][score_fields_keys_length]=result[""+x+""][""+y+""];
 	           
-	            str=str+"<td>";i
+	            str=str+"<td>";
                     if(y=="D8"){
 
                       str=str+"<img src='";
@@ -2864,6 +3313,8 @@ jQuery.ajax({
       data: JSON.stringify(jsonObjects),
       error:function(xhr){
       //alert("An error occured: " + xhr.status + " " + xhr.statusText);
+        clearInterval(display_interval);
+
         var activityJSONstr=retrieveFromLocalStorage("Activity");
         var activityJSON=JSON.parse(activityJSONstr);
         for(var x in activityJSON)
@@ -2874,7 +3325,7 @@ jQuery.ajax({
          if(x==selectedvalue) 
            {
              datapoints=activityJSON[""+x+""];
-             alert(datapoints);
+           
              /*
              for(var y in datapoints)
                 {
@@ -2895,6 +3346,8 @@ jQuery.ajax({
     },
       success: function(result) {
       	
+           clearInterval(display_interval);
+
       	 clickscounter=0;
           pointsscored=0;
           extractActivityDataPoints(result);
@@ -3067,7 +3520,7 @@ jQuery.ajax({
       contentType: "application/json",
       data: JSON.stringify(jsonObjects),
       error:function(xhr){
-           clearInterval(display__food_interval);
+           clearInterval(display_interval);
 
       //alert("An error occured: " + xhr.status + " " + xhr.statusText);
         var mealsJSONstr=retrieveFromLocalStorage("Meals");
@@ -3101,7 +3554,7 @@ jQuery.ajax({
       
     },
       success: function(result) {
-      clearInterval(display__food_interval);
+      clearInterval(display_interval);
      //Write your code here
         clickscounter=0;
           pointsscored=0;
